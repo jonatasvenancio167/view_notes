@@ -47,6 +47,10 @@ After running the above command execute this command to active scripts
 
 <p>.venv\Scripts\active</p>
 
+and now run project
+
+<p>flask run</p>
+
 <h1>Considerations</h1>
 
 Now just follow steps above and be happy. 
