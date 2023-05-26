@@ -45,7 +45,7 @@ first execute this command to generate venv directory
 
 After running the above command execute this command to active scripts
 
-<p>.venv\Scripts\active</p>
+<p>.venv\Scripts\activate</p>
 
 and now run project
 
