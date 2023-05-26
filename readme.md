@@ -41,15 +41,15 @@
 
 first execute this command to generate venv directory
 
-<p>py -3 -m venv .venv</p>
+<p><strong>py -3 -m venv .venv</strong></p>
 
 After running the above command execute this command to active scripts
 
-<p>.venv\Scripts\activate</p>
+<p><strong>.venv\Scripts\activate</strong></p>
 
 and now run project
 
-<p>flask run</p>
+<p><strong>flask run</strong></p>
 
 <h1>Considerations</h1>
 
