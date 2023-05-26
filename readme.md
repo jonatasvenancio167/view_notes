@@ -33,7 +33,7 @@
 
 <ul>
   <li>Python 3.11.3</li>
-  <li>Python 2.3.2</li>
+  <li>Flask 2.3.2</li>
   <li>SQLite</li>
 </ul>
 
