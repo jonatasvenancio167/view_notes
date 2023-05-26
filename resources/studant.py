@@ -8,7 +8,7 @@ from schemas import PlainStudant, StudantUpdateSchema
 
 blp = Blueprint("Studants", "studants", description="Operations on studants")
 
-@blp.route("/studant/<string:item_id>")
+@blp.route("/studant/<string:studant_id>")
 class Studant(MethodView):
   @blp.response(200, PlainStudant)
   def get(self, studant_id):
