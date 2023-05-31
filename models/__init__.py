@@ -1,2 +1,2 @@
 from models.studant import StudantModel
-from models.note import StudantModel
+from models.note import NoteModel
