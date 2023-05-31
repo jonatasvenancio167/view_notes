@@ -12,11 +12,11 @@ blp = Blueprint("Studants", "studants", description="Operations on studants")
 class Studant(MethodView):
   @blp.response(200, PlainStudant)
   def get(self, studant_id):
-    studant = StudantModel.query.get_or_404(studant_id)
+    studant = StudantModel.query.filter_by(id=studant_id).first_or_404()
     return studant
   
   def delete(self, studant_id):
-    studant = StudantModel.query.get_or_404(studant_id)
+    studant = StudantModel.query.filter_by(id=studant_id).first_or_404()
     db.session.delete(studant)
     db.session.commit()
     return { "message": "Studant deleted." }
@@ -24,11 +24,10 @@ class Studant(MethodView):
   @blp.arguments(StudantUpdateSchema)
   @blp.response(200, PlainStudant)
   def put(self, studant_data, studant_id):
-    studant = StudantModel.query.get(studant_id)
+    studant = StudantModel.query.filter_by(id=studant_id).first()
     
     if studant:
       studant.name = studant_data["name"]
-      studant.status = studant_data["status"]
     else:
       studant = StudantModel(id=studant_id, **studant_data)
       
@@ -47,9 +46,9 @@ class Studant(MethodView):
     @blp.response(200, PlainStudant)
     def post(self, studant_data):
       studant = StudantModel(**studant_data)
-      
       try:
         db.session.add(studant)
         db.session.commit()
-      except SQLAlchemyError:
-        abort(500, message="An error occurred while inserting the studant")
+      except SQLAlchemyError as e:
+        abort(500, message=f"An error occurred while inserting the studant: {str(e)}")
+        db.session.rollback()
