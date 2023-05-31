@@ -7,6 +7,7 @@ from db import db
 import models
 
 from resources.studant import blp as StudantBlueprint
+from resources.note import blp as NoteBlueprint
 
 def create_app(db_url=None):
 	app = Flask(__name__)
@@ -29,5 +30,6 @@ def create_app(db_url=None):
 		db.create_all()
 		
 		api.register_blueprint(StudantBlueprint)
-		
+		api.register_blueprint(NoteBlueprint)
+  
 		return app
