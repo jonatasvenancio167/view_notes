@@ -2,8 +2,6 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from sqlalchemy.exc import SQLAlchemyError
 
-from flask import jsonify
-
 from db import db
 from models import NoteModel
 from schemas import PlainNoteSchema, NoteSchema
@@ -15,7 +13,7 @@ class Note(MethodView):
   @blp.response(200, PlainNoteSchema)
   def get(self, note_id):
     note = NoteModel.query.get_or_404(note_id)
-    return jsonify(note.serialize_with_student())
+    return note
   
   def delete(self, note_id):
     note = NoteModel.query.filter_by(id=note_id).first_or_404()

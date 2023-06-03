@@ -21,11 +21,4 @@ class NoteModel(db.Model):
       "note_1": self.note_1,
       "note_2": self.note_2,
       "finally_note": self.finally_note,
-      "student": {
-          "cpf": self.studant.cpf,
-          "name": self.studant.name,
-          "birthdate": self.studant.birthdate,
-          "sex": self.studant.sex,
-          "age": self.studant.age
-        } if self.studant else None
-  }
+    }

@@ -1,9 +1,11 @@
+from flask import jsonify
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from sqlalchemy.exc import SQLAlchemyError
 
 from db import db
 from models import StudantModel
+from models.note import NoteModel
 from schemas import PlainStudant, StudantUpdateSchema
 
 blp = Blueprint("Studants", "studants", description="Operations on studants")
@@ -52,3 +54,19 @@ class Studant(MethodView):
       except SQLAlchemyError as e:
         abort(500, message=f"An error occurred while inserting the studant: {str(e)}")
         db.session.rollback()
+  
+  @blp.route("/studant/<string:studant_id>/notes")
+  def get_student_notes(studant_id):
+    student = StudantModel.query.filter_by(id=studant_id).first_or_404()
+    notes = NoteModel.query.filter_by(studant_id=studant_id).all()
+    
+    notes_data = [note.serialize_with_student() for note in notes]
+
+    return jsonify({
+      "cpf": student.cpf,
+      "name": student.name,
+      "birthdate": student.birthdate,
+      "sex": student.sex,
+      "age": student.age,
+      "notes": notes_data
+    })
