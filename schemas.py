@@ -13,9 +13,14 @@ class PlainNoteSchema(Schema):
   note_1 = fields.Float(required=True)
   note_2 = fields.Float(required=False)
   finally_note = fields.Float(required=False)
+  status = fields.Str(required=False)
 
 class StudantUpdateSchema(Schema):
   name = fields.Str(required=True)
+  
+class NoteUpdateSchema(Schema):
+  note_1 = fields.Float(required=False)
+  note_2 = fields.Float(required=False)
   
 class StudantSchema(PlainStudant):
   notes = fields.List(fields.Nested(lambda: PlainNoteSchema()), dump_only=True)
