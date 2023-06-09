@@ -4,34 +4,38 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from db import db
 from models import NoteModel
-from schemas import PlainNoteSchema, NoteSchema
+from schemas import PlainNoteSchema, NoteSchema, NoteUpdateSchema
 
 blp = Blueprint("Notes", "notes", description="Operations on notes")
 
 @blp.route("/note/<string:note_id>")
 class Note(MethodView):
+  
   @blp.response(200, PlainNoteSchema)
   def get(self, note_id):
     note = NoteModel.query.get_or_404(note_id)
+    
     return note
   
   def delete(self, note_id):
     note = NoteModel.query.filter_by(id=note_id).first_or_404()
     db.session.delete(note)
     db.session.commit()
+    
     return { "message": "Note deleted." }
   
+  @blp.arguments(NoteUpdateSchema)
   @blp.response(200, PlainNoteSchema)
   def put(self, note_data, note_id):
-    avaliation = NoteModel.query.get(note_id)
+    avaliation = NoteModel.query.filter_by(id=note_id).first()
     
     if avaliation:
-      avaliation.note_1 = note_data["note_1"]
-      avaliation.note_2 = note_data["note_2"]
-      avaliation.finally_note = note_data["finally_note"]
+      avaliation.note_1 = note_data.get("note_1", avaliation.note_1)
+      avaliation.note_2 = note_data.get("note_2", avaliation.note_2)
+      avaliation.finally_note = avaliation.calculate_final_grade()
     else:
       avaliation = NoteModel(id=note_id, **note_data)
-      
+
     db.session.add(avaliation)
     db.session.commit()
     
@@ -39,6 +43,7 @@ class Note(MethodView):
 
 @blp.route("/note")
 class NoteList(MethodView):
+  
   @blp.response(200, PlainNoteSchema(many=True))
   def get(self):
     notes = NoteModel.query.all()
@@ -60,3 +65,4 @@ class NoteList(MethodView):
       db.session.rollback()
     
     return note
+  
