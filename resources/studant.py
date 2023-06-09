@@ -12,15 +12,18 @@ blp = Blueprint("Studants", "studants", description="Operations on studants")
 
 @blp.route("/studant/<string:studant_id>")
 class Studant(MethodView):
+  
   @blp.response(200, PlainStudant)
   def get(self, studant_id):
     studant = StudantModel.query.filter_by(id=studant_id).first_or_404()
+    
     return studant
   
   def delete(self, studant_id):
     studant = StudantModel.query.filter_by(id=studant_id).first_or_404()
     db.session.delete(studant)
     db.session.commit()
+    
     return { "message": "Studant deleted." }
   
   @blp.arguments(StudantUpdateSchema)
@@ -40,6 +43,7 @@ class Studant(MethodView):
 
   @blp.route("/studant")
   class StudantList(MethodView):
+    
     @blp.response(200, PlainStudant(many=True))
     def get(self):
       return StudantModel.query.all()
@@ -48,6 +52,7 @@ class Studant(MethodView):
     @blp.response(200, PlainStudant)
     def post(self, studant_data):
       studant = StudantModel(**studant_data)
+      
       try:
         db.session.add(studant)
         db.session.commit()
